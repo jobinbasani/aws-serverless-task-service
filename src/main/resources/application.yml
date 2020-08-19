@@ -1,0 +1,2 @@
+database:
+      table: ${DYNAMODB_TABLE}

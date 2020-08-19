@@ -1,0 +1,58 @@
+service: task-service
+custom:
+  dynamodbTableName: tasksTable
+  dynamodb:
+    stages:
+      - dev
+    start:
+      port: 8000
+      inMemory: true
+      migrate: true
+provider:
+  name: aws
+  runtime: provided
+  region: us-east-2
+  memorySize: 128
+  timeout: 5
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - dynamodb:Query
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource:
+        Fn::GetAtt:
+          - tasksTable
+          - Arn
+  environment:
+    DISABLE_SIGNAL_HANDLERS: true
+    DYNAMODB_TABLE: ${self:custom.dynamodbTableName}
+
+plugins:
+  - serverless-dynamodb-local
+  - serverless-offline
+
+package:
+  artifact: build/function.zip
+
+resources:
+  Resources:
+    tasksTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:custom.dynamodbTableName}
+        AttributeDefinitions:
+          - AttributeName: taskId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: taskId
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+
+functions:
+  tasks-manager:
+    handler: com.jobinbasani.handler.Handler
