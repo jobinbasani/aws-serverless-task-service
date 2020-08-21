@@ -21,6 +21,8 @@ dependencies {
 
     testImplementation 'io.quarkus:quarkus-junit5'
     testCompileOnly 'org.projectlombok:lombok:1.18.12'
+    testCompile "org.testcontainers:testcontainers:1.14.3"
+    testCompile "org.testcontainers:junit-jupiter:1.14.3"
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
 }
 

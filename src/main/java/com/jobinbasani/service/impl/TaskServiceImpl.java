@@ -4,6 +4,7 @@ import com.jobinbasani.config.DatabaseConfig;
 import com.jobinbasani.data.Task;
 import com.jobinbasani.service.TaskService;
 import lombok.Data;
+import org.jboss.logging.Logger;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
 import software.amazon.awssdk.services.dynamodb.model.PutItemRequest;
@@ -24,9 +25,11 @@ public class TaskServiceImpl implements TaskService {
     public final static String TASK_ID_COL = "taskId";
     public final static String TASK_NAME_COL = "taskName";
 
+    private static final Logger LOG = Logger.getLogger(TaskServiceImpl.class);
+
     @Override
     public void addTask(Task task) {
-        System.out.println("table is "+databaseConfig.getTable());
+        LOG.debug("Table is " + databaseConfig.getTable());
 
         Map<String, AttributeValue> item = new HashMap<>();
         item.put(TASK_ID_COL, AttributeValue.builder().s(task.getTaskId()).build());
@@ -40,7 +43,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public List<Task> getTasks() {
-        
+
         return null;
     }
 

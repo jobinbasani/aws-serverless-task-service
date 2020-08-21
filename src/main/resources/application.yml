@@ -17,10 +17,15 @@ database:
 
 "%test":
   database:
+    docker-image: amazon/dynamodb-local:1.13.2
+    docker-command: -jar DynamoDBLocal.jar -inMemory -sharedDb
     table: tasksTable
+    create-table-command: aws dynamodb create-table --table-name tasksTable --attribute-definitions AttributeName=taskId,AttributeType=S --key-schema AttributeName=taskId,KeyType=HASH --provisioned-throughput ReadCapacityUnits=1,WriteCapacityUnits=1 --endpoint-url http://localhost:8000
   quarkus:
+    log:
+      level: DEBUG
     dynamodb:
-      endpoint-override: 'http://localhost:8000/'
+      endpoint-override: http://localhost:8000/
       aws:
         region: us-east-2
         credentials:
