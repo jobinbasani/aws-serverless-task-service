@@ -14,8 +14,8 @@ public class Handler implements RequestHandler<Task, String> {
 
     @Override
     public String handleRequest(Task input, Context context) {
-        System.out.println("Inputs is "+input.getName());
+        System.out.println("Inputs is "+input.getTaskName());
         taskService.addTask(input);
-        return input.getName();
+        return input.getTaskName();
     }
 }

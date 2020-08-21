@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public class Task {
-
-    String name;
+    String taskId;
+    String taskName;
 }
