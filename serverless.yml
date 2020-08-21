@@ -1,4 +1,5 @@
 service: task-service
+
 custom:
   dynamodbTableName: tasksTable
   dynamodb:
@@ -8,6 +9,7 @@ custom:
       port: 8000
       inMemory: true
       migrate: true
+
 provider:
   name: aws
   runtime: provided
@@ -56,3 +58,25 @@ resources:
 functions:
   tasks-manager:
     handler: com.jobinbasani.handler.Handler
+    events:
+      - http:
+          path: task/add
+          method: post
+          integration: lambda
+          request:
+            template:
+              application/json: >
+                #set($inputRoot = $input.path('$'))
+                {
+                  "taskName": "$inputRoot.taskName"
+                }
+          response:
+            headers:
+              Access-Control-Allow-Origin: "'*'"
+              Content-Type: "'application/json'"
+            template: >
+              #set($inputRoot = $input.path('$'))
+              {
+                "result": $inputRoot
+              }
+

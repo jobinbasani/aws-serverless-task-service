@@ -10,10 +10,7 @@ import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
 import software.amazon.awssdk.services.dynamodb.model.PutItemRequest;
 
 import javax.enterprise.context.ApplicationScoped;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Data
 @ApplicationScoped
@@ -28,9 +25,9 @@ public class TaskServiceImpl implements TaskService {
     private static final Logger LOG = Logger.getLogger(TaskServiceImpl.class);
 
     @Override
-    public void addTask(Task task) {
+    public Task addTask(Task task) {
         LOG.debug("Table is " + databaseConfig.getTable());
-
+        task.setTaskId(UUID.randomUUID().toString());
         Map<String, AttributeValue> item = new HashMap<>();
         item.put(TASK_ID_COL, AttributeValue.builder().s(task.getTaskId()).build());
         item.put(TASK_NAME_COL, AttributeValue.builder().s(task.getTaskName()).build());
@@ -38,7 +35,7 @@ public class TaskServiceImpl implements TaskService {
                 .tableName(databaseConfig.getTable())
                 .item(item)
                 .build());
-
+        return task;
     }
 
     @Override
