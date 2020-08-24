@@ -18,7 +18,6 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Optional;
-import java.util.UUID;
 
 import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 
@@ -43,7 +42,7 @@ public class TaskServiceTest {
     private static final Logger LOG = Logger.getLogger(TaskServiceTest.class);
 
     @BeforeAll
-    public void setup() throws IOException, URISyntaxException, InterruptedException {
+    public void setup() throws IOException, URISyntaxException {
         URI endpoint = new URI(endpointUrl);
         dynamodbContainer = new FixedHostPortGenericContainer(dockerImage)
                 .withFixedExposedPort(endpoint.getPort(), containerPort)
@@ -64,9 +63,21 @@ public class TaskServiceTest {
     @Test
     public void addTaskTest(){
         Task task = new Task();
-        task.setTaskId(UUID.randomUUID().toString());
         task.setTaskName("Task Name");
-        taskService.addTask(task);
+        Task addedTask = taskService.addTask(task);
+        assert addedTask.getTaskId() != null;
+    }
+
+    @Test
+    public void getTaskTest(){
+        Task task = new Task();
+        task.setTaskName("Task Name");
+        Task addedTask = taskService.addTask(task);
+
+        Optional<Task> lookupResult = taskService.getTask(addedTask.getTaskId());
+        assert lookupResult.isPresent();
+        assert lookupResult.get().getTaskId().equals(addedTask.getTaskId());
+        assert lookupResult.get().getTaskName().equals(task.getTaskName());
     }
 
 }

@@ -12,6 +12,7 @@ import lombok.SneakyThrows;
 import org.jboss.logging.Logger;
 
 import javax.inject.Inject;
+import java.util.Optional;
 
 public class Handler implements RequestHandler<TaskRequest, String> {
 
@@ -26,9 +27,11 @@ public class Handler implements RequestHandler<TaskRequest, String> {
     @Override
     @SneakyThrows
     public String handleRequest(TaskRequest input, Context context) {
-        switch (parseRequest(input.getAction())) {
+        switch (getAction(input.getAction())) {
             case CREATE_TASK:
                 return addTask(input);
+            case GET_TASK:
+                return getTask(input);
             case UNKNOWN:
                 return null;
         }
@@ -40,7 +43,12 @@ public class Handler implements RequestHandler<TaskRequest, String> {
         return mapper.writeValueAsString(newTask);
     }
 
-    private REQUEST_TYPE parseRequest(String requestType) {
+    private String getTask(TaskRequest input) throws JsonProcessingException {
+        Optional<Task> task = taskService.getTask(input.getTaskId());
+        return mapper.writeValueAsString(task);
+    }
+
+    private REQUEST_TYPE getAction(String requestType) {
         try {
             return REQUEST_TYPE.valueOf(requestType);
         } catch (Exception e) {

@@ -34,6 +34,6 @@ sls dynamodb start --migration
 Run Dynamodb locally first and then invoke the function:
 
 ```
-sls invoke local -f tasks-manager --data '{"action":"CREATE_TASK","taskName":"name"}' --stage dev
+sls invoke local -f add-task --data '{"action":"CREATE_TASK","taskName":"name"}' --stage dev
 ```
 

@@ -56,7 +56,7 @@ resources:
           WriteCapacityUnits: 1
 
 functions:
-  tasks-manager:
+  add-task:
     handler: com.jobinbasani.handler.Handler
     events:
       - http:
@@ -68,7 +68,32 @@ functions:
               application/json: >
                 #set($inputRoot = $input.path('$'))
                 {
-                  "taskName": "$inputRoot.taskName"
+                  "taskName": "$inputRoot.taskName",
+                  "action": "CREATE_TASK"
+                }
+          response:
+            headers:
+              Access-Control-Allow-Origin: "'*'"
+              Content-Type: "'application/json'"
+            template: >
+              #set($inputRoot = $input.path('$'))
+              {
+                "result": $inputRoot
+              }
+  get-task:
+    handler: com.jobinbasani.handler.Handler
+    events:
+      - http:
+          path: task/{taskId}
+          method: get
+          integration: lambda
+          request:
+            template:
+              application/json: >
+                #set($inputRoot = $input.path('$'))
+                {
+                  "taskId": "$input.params('taskId')",
+                  "action": "GET_TASK"
                 }
           response:
             headers:
