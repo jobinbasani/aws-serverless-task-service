@@ -104,4 +104,27 @@ functions:
               {
                 "result": $inputRoot
               }
-
+  delete-task:
+    handler: com.jobinbasani.handler.Handler
+    events:
+      - http:
+          path: task/{taskId}
+          method: delete
+          integration: lambda
+          request:
+            template:
+              application/json: >
+                #set($inputRoot = $input.path('$'))
+                {
+                  "taskId": "$input.params('taskId')",
+                  "action": "DELETE_TASK"
+                }
+          response:
+            headers:
+              Access-Control-Allow-Origin: "'*'"
+              Content-Type: "'application/json'"
+            template: >
+              #set($inputRoot = $input.path('$'))
+              {
+                "result": $inputRoot
+              }

@@ -19,6 +19,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Optional;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 
 @QuarkusTest
@@ -78,6 +79,18 @@ public class TaskServiceTest {
         assert lookupResult.isPresent();
         assert lookupResult.get().getTaskId().equals(addedTask.getTaskId());
         assert lookupResult.get().getTaskName().equals(task.getTaskName());
+    }
+
+    @Test
+    public void deleteTaskTest(){
+        Task task = new Task();
+        task.setTaskName("Task Name");
+        Task addedTask = taskService.addTask(task);
+
+        taskService.deleteTask(addedTask.getTaskId());
+
+        Optional<Task> lookupResult = taskService.getTask(addedTask.getTaskId());
+        assertFalse(lookupResult.isPresent());
     }
 
 }

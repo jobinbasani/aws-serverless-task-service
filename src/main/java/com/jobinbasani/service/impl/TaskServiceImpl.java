@@ -6,10 +6,7 @@ import com.jobinbasani.service.TaskService;
 import lombok.Data;
 import org.jboss.logging.Logger;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
-import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
-import software.amazon.awssdk.services.dynamodb.model.GetItemRequest;
-import software.amazon.awssdk.services.dynamodb.model.GetItemResponse;
-import software.amazon.awssdk.services.dynamodb.model.PutItemRequest;
+import software.amazon.awssdk.services.dynamodb.model.*;
 
 import javax.enterprise.context.ApplicationScoped;
 import java.util.*;
@@ -55,20 +52,20 @@ public class TaskServiceImpl implements TaskService {
                         .key(Map.of(TASK_ID_COL, AttributeValue.builder().s(taskId).build()))
                         .build()
         );
-        if (response.hasItem()) {
-            LOG.debug("Item found with id ->" + taskId);
-            Map<String, AttributeValue> item = response.item();
-            Task task = new Task();
-            task.setTaskId(item.get(TASK_ID_COL).s());
-            task.setTaskName(item.get(TASK_NAME_COL).s());
-            return Optional.of(task);
+        if (!response.hasItem()) {
+            LOG.debug("Could not find item with id ->" + taskId);
+            return Optional.empty();
         }
-        LOG.debug("Could not find item with id ->" + taskId);
-        return Optional.empty();
+        LOG.debug("Item found with id ->" + taskId);
+        return Optional.of(Task.from(response.item()));
     }
 
     @Override
     public void deleteTask(String taskId) {
-
+        dynamoDbClient.deleteItem(DeleteItemRequest.builder()
+                .tableName(databaseConfig.getTable())
+                .key(Map.of(TASK_ID_COL, AttributeValue.builder().s(taskId).build()))
+                .build());
     }
+
 }
