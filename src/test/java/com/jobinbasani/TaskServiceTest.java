@@ -35,16 +35,18 @@ public class TaskServiceTest {
     String dockerImage;
     @ConfigProperty(name="database.docker-command")
     String dockerCommand;
+    @ConfigProperty(name="database.container-port")
+    int containerPort;
     @ConfigProperty(name="quarkus.dynamodb.endpoint-override")
     String endpointUrl;
     GenericContainer dynamodbContainer;
     private static final Logger LOG = Logger.getLogger(TaskServiceTest.class);
 
     @BeforeAll
-    public void setup() throws IOException, URISyntaxException {
+    public void setup() throws IOException, URISyntaxException, InterruptedException {
         URI endpoint = new URI(endpointUrl);
         dynamodbContainer = new FixedHostPortGenericContainer(dockerImage)
-                .withFixedExposedPort(endpoint.getPort(), endpoint.getPort())
+                .withFixedExposedPort(endpoint.getPort(), containerPort)
                 .withCommand(dockerCommand);
         dynamodbContainer.start();
         ProcessBuilder pb = new ProcessBuilder(createTableCommand.split(" "));

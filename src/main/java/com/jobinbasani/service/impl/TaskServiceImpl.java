@@ -25,17 +25,19 @@ public class TaskServiceImpl implements TaskService {
     private static final Logger LOG = Logger.getLogger(TaskServiceImpl.class);
 
     @Override
-    public Task addTask(Task task) {
+    public Task addTask(Task request) {
         LOG.debug("Table is " + databaseConfig.getTable());
-        task.setTaskId(UUID.randomUUID().toString());
+        Task newTask = new Task();
+        newTask.setTaskId(UUID.randomUUID().toString());
+        newTask.setTaskName(request.getTaskName());
         Map<String, AttributeValue> item = new HashMap<>();
-        item.put(TASK_ID_COL, AttributeValue.builder().s(task.getTaskId()).build());
-        item.put(TASK_NAME_COL, AttributeValue.builder().s(task.getTaskName()).build());
+        item.put(TASK_ID_COL, AttributeValue.builder().s(newTask.getTaskId()).build());
+        item.put(TASK_NAME_COL, AttributeValue.builder().s(newTask.getTaskName()).build());
         dynamoDbClient.putItem(PutItemRequest.builder()
                 .tableName(databaseConfig.getTable())
                 .item(item)
                 .build());
-        return task;
+        return newTask;
     }
 
     @Override
