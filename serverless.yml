@@ -128,3 +128,27 @@ functions:
               {
                 "result": $inputRoot
               }
+
+  get-all-tasks:
+    handler: com.jobinbasani.handler.Handler
+    events:
+      - http:
+          path: tasks
+          method: get
+          integration: lambda
+          request:
+            template:
+              application/json: >
+                #set($inputRoot = $input.path('$'))
+                {
+                  "action": "LIST"
+                }
+          response:
+            headers:
+              Access-Control-Allow-Origin: "'*'"
+              Content-Type: "'application/json'"
+            template: >
+              #set($inputRoot = $input.path('$'))
+              {
+                "result": $inputRoot
+              }

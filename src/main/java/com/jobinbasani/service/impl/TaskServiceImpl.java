@@ -10,6 +10,7 @@ import software.amazon.awssdk.services.dynamodb.model.*;
 
 import javax.enterprise.context.ApplicationScoped;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Data
 @ApplicationScoped
@@ -40,8 +41,14 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public List<Task> getTasks() {
-
-        return null;
+        return dynamoDbClient.scan(ScanRequest.builder()
+                .tableName(databaseConfig.getTable())
+                .attributesToGet(TASK_ID_COL, TASK_NAME_COL)
+                .build())
+                .items()
+                .stream()
+                .map(Task::from)
+                .collect(Collectors.toList());
     }
 
     @Override

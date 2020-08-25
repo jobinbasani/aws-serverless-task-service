@@ -21,7 +21,8 @@ database:
     docker-command: -jar DynamoDBLocal.jar -inMemory -sharedDb
     container-port: 8000
     table: tasksTable
-    create-table-command: aws dynamodb create-table --endpoint-url http://localhost:8001 --table-name tasksTable --attribute-definitions AttributeName=taskId,AttributeType=S --key-schema AttributeName=taskId,KeyType=HASH --provisioned-throughput ReadCapacityUnits=1,WriteCapacityUnits=1
+    read-capacity-units: 1
+    write-capacity-units: 1
   quarkus:
     log:
       level: DEBUG

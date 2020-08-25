@@ -34,6 +34,8 @@ public class Handler implements RequestHandler<TaskRequest, String> {
                 return getTask(input);
             case DELETE_TASK:
                 return deleteTask(input);
+            case LIST:
+                return getAllTasks();
             case UNKNOWN:
                 return null;
         }
@@ -53,6 +55,10 @@ public class Handler implements RequestHandler<TaskRequest, String> {
     private String deleteTask(TaskRequest input) throws JsonProcessingException {
         taskService.deleteTask(input.getTaskId());
         return mapper.writeValueAsString("Deleted "+input.getTaskId());
+    }
+
+    private String getAllTasks() throws JsonProcessingException {
+        return mapper.writeValueAsString(taskService.getTasks());
     }
 
     private REQUEST_TYPE getAction(String requestType) {
