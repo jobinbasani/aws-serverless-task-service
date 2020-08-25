@@ -108,6 +108,11 @@ public class TaskServiceTest {
 
     @Test
     public void getAllTasks(){
+        taskService.getTasks()
+                .stream()
+                .map(Task::getTaskId)
+                .forEach(taskService::deleteTask);
+
         Task task = new Task();
         task.setTaskName("Task 1");
         taskService.addTask(task);
@@ -115,7 +120,7 @@ public class TaskServiceTest {
         taskService.addTask(task);
 
         List<Task> allTasks = taskService.getTasks();
-        assertTrue(allTasks.size() >= 2);
+        assertTrue(allTasks.size() == 2);
     }
 
 }
