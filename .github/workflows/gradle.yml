@@ -23,4 +23,4 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
     - name: Build with Gradle
-      run: ./gradlew clean build -Dquarkus.package.type=native
+      run: ./gradlew clean build -Dquarkus.package.type=native -Dquarkus.native.container-build=true
