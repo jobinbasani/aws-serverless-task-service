@@ -20,9 +20,11 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok:1.18.12'
 
     testImplementation 'io.quarkus:quarkus-junit5'
+    testImplementation  "io.quarkus:quarkus-test-amazon-lambda"
     testCompileOnly 'org.projectlombok:lombok:1.18.12'
     testCompile "org.testcontainers:testcontainers:1.14.3"
     testCompile "org.testcontainers:junit-jupiter:1.14.3"
+    testCompile "net.javacrumbs.json-unit:json-unit-assertj:2.18.0"
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
 }
 

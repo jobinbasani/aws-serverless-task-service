@@ -2,7 +2,10 @@ package com.jobinbasani;
 
 import com.jobinbasani.config.TestDatabaseConfig;
 import com.jobinbasani.data.Task;
+import com.jobinbasani.data.TaskRequest;
+import com.jobinbasani.enums.REQUEST_TYPE;
 import com.jobinbasani.service.TaskService;
+import io.quarkus.amazon.lambda.test.LambdaClient;
 import io.quarkus.test.junit.QuarkusTest;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.jboss.logging.Logger;
@@ -23,6 +26,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.jobinbasani.service.impl.TaskServiceImpl.TASK_ID_COL;
+import static net.javacrumbs.jsonunit.assertj.JsonAssertions.assertThatJson;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
@@ -121,6 +125,18 @@ public class TaskServiceTest {
 
         List<Task> allTasks = taskService.getTasks();
         assertTrue(allTasks.size() == 2);
+    }
+
+    @Test
+    public void testCreateAction(){
+        String taskName = "New Task";
+        TaskRequest request = new TaskRequest();
+        request.setAction(REQUEST_TYPE.CREATE_TASK.toString());
+        request.setTaskName(taskName);
+        String outputJson = LambdaClient.invoke(String.class, request);
+        assertThatJson(outputJson)
+                .inPath("$.taskName")
+                .isEqualTo(taskName);
     }
 
 }

@@ -24,6 +24,8 @@ database:
     read-capacity-units: 1
     write-capacity-units: 1
   quarkus:
+    lambda:
+      enable-polling-jvm-mode: true
     log:
       level: DEBUG
     dynamodb:
