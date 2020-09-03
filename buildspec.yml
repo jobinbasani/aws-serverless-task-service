@@ -2,6 +2,9 @@ version: 0.2
 
 phases:
   install:
+    runtime-versions:
+      java: openjdk11
+      nodejs: 10
     commands:
       - npm install -g serverless
   build:
