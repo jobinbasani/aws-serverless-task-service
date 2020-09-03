@@ -1,6 +1,10 @@
 version: 0.2
 
 phases:
+  install:
+    commands:
+      - npm install -g serverless
   build:
     commands:
       - ./gradlew clean build -Dquarkus.package.type=native -Dquarkus.native.container-build=true
+      - sls deploy -v -s $ENV_NAME
