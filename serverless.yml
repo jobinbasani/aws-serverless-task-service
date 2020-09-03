@@ -1,5 +1,9 @@
 service: task-service
 
+plugins:
+  - serverless-dynamodb-local
+  - serverless-offline
+
 custom:
   dynamodbTableName: tasksTable
   dynamodb:
@@ -32,10 +36,6 @@ provider:
   environment:
     DISABLE_SIGNAL_HANDLERS: true
     DYNAMODB_TABLE: ${self:custom.dynamodbTableName}
-
-plugins:
-  - serverless-dynamodb-local
-  - serverless-offline
 
 package:
   artifact: build/function.zip
