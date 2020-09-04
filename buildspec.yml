@@ -9,6 +9,7 @@ phases:
       - npm install -g serverless
       - npm install serverless-offline --save-dev
       - npm install serverless-dynamodb-local@0.2.10
+      - sls dynamodb install
   build:
     commands:
       - ./gradlew clean build -Dquarkus.package.type=native -Dquarkus.native.container-build=true
