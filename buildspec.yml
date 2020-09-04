@@ -7,8 +7,8 @@ phases:
       nodejs: 12
     commands:
       - npm install -g serverless
-      - npm install serverless-offline --save-dev
-      - npm install serverless-dynamodb-local@0.2.10
+      - npm install -g serverless-offline --save-dev
+      - npm install -g serverless-dynamodb-local@0.2.10
       - sls dynamodb install
   build:
     commands:
