@@ -5,7 +5,8 @@ plugins:
   - serverless-offline
 
 custom:
-  dynamodbTableName: tasksTable
+  stageName: ${opt:stage, 'dev'}
+  dynamodbTableName: ${self:custom.stageName}-tasksTable
   dynamodb:
     stages:
       - dev
@@ -20,6 +21,7 @@ provider:
   region: us-east-2
   memorySize: 128
   timeout: 5
+  stage: ${self:custom.stageName}
   iamRoleStatements:
     - Effect: "Allow"
       Action:
