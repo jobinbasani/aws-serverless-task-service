@@ -3,7 +3,7 @@ database:
 
 "%dev":
   database:
-    table: tasksTable
+    table: dev-tasksTable
   quarkus:
     dynamodb:
       endpoint-override: 'http://host.docker.internal:8000'
